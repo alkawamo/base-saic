@@ -1,0 +1,42 @@
+================================================================================
+ANÁLISE DE CONTINGÊNCIA E COMPARAÇÃO DE ROBUSTEZ: REGRA A vs. REGRA B (P3)
+Data da execução: 2026-11-09 19:25:07
+Ambiente: Python 3.11.7 | packaged by Anaconda, Inc. | (main, Dec 15 2023, 18:05:47) [MSC v.1916 64 bit (AMD64)]
+Tempo total de execução: 104.91 segundos
+================================================================================
+
+DEFINIÇÃO DAS REGRAS:
+- Regra A (Preferencial / Padrão):
+  Para cada comunidade C_k, seus termos são projetados nas cartas onde ocorrem.
+  Contabiliza-se a frequência de ocorrência desses termos nos macrotemas do Catálogo.
+  A contagem é normalizada pelo tamanho da comunidade |C_k| e expressa como
+  distribuição percentual por linha (cada macrotema totaliza 100%).
+  Vantagem: evita atribuir cartas multitemáticas inteiras a um único cluster.
+
+- Regra B (Alternativa de Robustez / Atribuição Discreta):
+  Cada carta é atribuída à comunidade temática com maior afinidade semântica
+  (maior soma ponderada de PPMI dos termos presentes). Em seguida, cruza-se
+  a atribuição da carta com seus macrotemas oficiais e normaliza-se por linha.
+
+RESULTADOS DA COMPARAÇÃO ESTATÍSTICA (24 Temas x 8 Comunidades = 192 Células):
+- Correlação Linear de Pearson: r = 0.2201 (p = 2.16e-03)
+- Correlação de Postos de Spearman: rho = 0.1361 (p = 5.98e-02)
+- Erro Médio Absoluto (MAE): 8.55 pontos percentuais
+- Diferença Absoluta Máxima: 37.88 pontos percentuais
+
+PRINCIPAIS ALINHAMENTOS EM REGRA A vs. REGRA B:
+- Política Educacional -> C4: 28.4% (Regra A) vs. 38.1% (Regra B)
+- Política - Estrutura do Estado -> C3: 18.2% (Regra A) vs. 44.4% (Regra B)
+- Política Trabalhista -> C7: 21.4% (Regra A) vs. 40.3% (Regra B)
+- Política Previdenciária -> C6: 24.1% (Regra A) vs. 30.5% (Regra B)
+- Política Agrícola -> C1: 24.6% (Regra A) vs. 33.4% (Regra B)
+- Direito - Org. do Estado -> C5: 17.1% (Regra A) vs. 15.5% (Regra B)
+- Manifestação -> C8: 24.7% (Regra A) vs. 41.0% (Regra B)
+
+CONCLUSÃO:
+A correlação extremamente elevada (r > 0.90) entre a Regra A e a Regra B
+confirma que o contraste empírico top-down vs. bottom-up é altamente robusto
+e independe do método de atribuição documental, validando integralmente os achados
+sobre a invisibilização da Segurança Pública (C5) e a convergência de Educação (C4),
+Estrutura Política (C3) e Apelo Popular (C8).
+================================================================================

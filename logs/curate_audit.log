@@ -1,0 +1,66 @@
+================================================================================
+AUDITORIA E CURADORIA DA BASE DE DADOS SAIC
+Data da auditoria: 2026-11-09 19:36:09
+Ambiente: Python 3.11.7 | packaged by Anaconda, Inc. | (main, Dec 15 2023, 18:05:47) [MSC v.1916 64 bit (AMD64)]
+Tempo de execução: 4.00 segundos
+================================================================================
+
+ESTATÍSTICAS GERAIS:
+- Total de registros brutos: 72719
+- Total de colunas: 21
+- Remetentes únicos desambiguados (ID PESSOA): 64869
+- Cartas preenchidas com sugestão: 71561
+- Textos únicos válidos após deduplicação: 70149
+- Macrotemas oficiais no Catálogo: 24
+
+INTEGRIDADE DAS COLUNAS:
+        Coluna  Nulos (N/A)  Valores Únicos
+     ID PESSOA            0           64869
+          NOME         6463           57264
+  DESTINATÁRIO        43329            2190
+      CATÁLOGO          150           14532
+     INDEXAÇÃO         1152           42941
+TEXTO SUGESTÃO         1158           70149
+        ORIGEM            0             178
+          DATA            0              97
+        FORMUL            0             999
+            DV            1              21
+         DATA2            0             108
+     MUNICÍPIO           97            3542
+            UF          122              26
+           CEP          119            5919
+          SEXO         3930               2
+       MORADOR         6189               2
+     INSTRUÇÃO         4664               8
+  ESTADO CIVIL         5384               5
+  FAIXA ETÁRIA         4756               8
+   FAIXA RENDA         7854               8
+     ATIVIDADE        12150              10
+
+DISTRIBUIÇÃO DOS 24 MACROTEMAS DO CATÁLOGO:
+                                 Macrotema  Frequência
+           Direito - Organização do Estado       25243
+                        Organização Social       23555
+                      Política Educacional       23022
+                      Política Trabalhista       21636
+            Política - Estrutura do Estado       15740
+                         Política Agrícola       10591
+                        Política Econômica        9037
+Administração de Pessoal - Serviço Público        7138
+                   Política Previdenciária        6851
+                       Política Financeira        5017
+                Política Nacional de Saúde        4901
+                 Sugestões Não Pertinentes        4611
+                  Meio Ambiente - Ecologia        2891
+          Política Nacional de Transportes        2732
+                     Política Habitacional        2669
+                              Manifestação        2156
+                          Telecomunicações        1216
+                       Política Industrial        1173
+                       Política Energética         823
+                      Política Indigenista         747
+            Política Nacional de Urbanismo         710
+ Pedido de Informação sobre a Constituinte         510
+                        Política Sanitária         454
+          Política Nacional da Informática         282
+================================================================================

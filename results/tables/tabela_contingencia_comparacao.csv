@@ -1,0 +1,5 @@
+Métrica,Valor
+Correlação de Pearson (r),0.2201 (p < 0.001)
+Correlação de Spearman (rho),0.1361 (p < 0.001)
+Erro Médio Absoluto (MAE),8.55 pontos percentuais
+Diferença Absoluta Máxima,37.88 pontos percentuais

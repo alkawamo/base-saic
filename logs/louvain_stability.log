@@ -1,0 +1,61 @@
+================================================================================
+EXPERIMENTO DE ESTABILIDADE DO LOUVAIN (P2)
+Data da execução: 2026-11-09 20:22:15
+Ambiente: Python 3.11.7 | packaged by Anaconda, Inc. | (main, Dec 15 2023, 18:05:47) [MSC v.1916 64 bit (AMD64)]
+Execuções: 50 seeds pseudoaleatórias independentes (seeds 0 a 49)
+Grafo ótimo analisado: |V| = 322, |E| = 1823
+Tempo total de execução: 8.26 segundos
+================================================================================
+
+PARTIÇÃO DE REFERÊNCIA (CANÔNICA - SEED 42):
+- Modularidade Q: 0.6363
+- Número de comunidades K: 8
+
+ESTATÍSTICAS EM 50 EXECUÇÕES (SEEDS 0–49):
+1. Modularidade (Q):
+   - Média ± Desvio: 0.6361 ± 0.0034
+   - Mínimo: 0.6215
+   - Máximo: 0.6397
+   - Mediana: 0.6366
+   - Coeficiente de Variação (CV): 0.54%
+
+2. Distribuição do Número de Comunidades (K):
+   - Média ± Desvio: 7.62 ± 0.49
+   - Distribuição detalhada: K=7: 19 vezes (38.0%), K=8: 31 vezes (62.0%)
+   - Mediana: 8
+
+3. Similaridade da Partição frente à Seed 42:
+   - Todas as 50 execuções:
+     * NMI: 0.8047 ± 0.0415 (Mín: 0.7409, Máx: 1.0000, Mediana: 0.8073)
+     * ARI: 0.7137 ± 0.0630 (Mín: 0.5921, Máx: 1.0000, Mediana: 0.7160)
+   - Excluindo a Seed 42 (49 execuções independentes):
+     * NMI: 0.8007 ± 0.0311 (Mín: 0.7409, Máx: 0.8622, Mediana: 0.8037)
+     * ARI: 0.7079 ± 0.0484 (Mín: 0.5921, Máx: 0.8016, Mediana: 0.7145)
+
+4. Análise de Fusões nas 19 Execuções com K = 7:
+   - Fusão C1+C2: 15 vezes (78.9% das seeds K=7, 30.0% do total de 50 seeds)
+   - Fusão C2+C6: 2 vezes (10.5% das seeds K=7, 4.0% do total de 50 seeds)
+   - Fusão C3+C8: 1 vezes (5.3% das seeds K=7, 2.0% do total de 50 seeds)
+   - Fusão C1+C5: 1 vezes (5.3% das seeds K=7, 2.0% do total de 50 seeds)
+
+INTERPRETAÇÃO TEÓRICA DA DINÂMICA K=7 vs. K=8:
+A alternância K=7 vs. K=8 concentra-se quase que exclusivamente na fusão entre C1
+(Desenvolvimento Econômico e Setores Produtivos) e C2 (Administração Pública e Organização do Estado),
+responsável por 15 das 19 ocorrências com K=7 (78,9% dos casos K=7, 30% de todas as 50 execuções).
+Essa fusão possui estrita aderência histórica e conceitual: no Brasil de 1986-1987 (redemocratização,
+Plano Cruzado, choque heterodoxo de controle de preços e reforma agrária), as demandas de intervenção
+econômica e a estrutura administrativa da União compunham um eixo indivisível no imaginário popular
+do Estado Desenvolvimentista. Em modularidade mais agregada, Louvain consolida esse macro-eixo;
+em resolução ótima mais refinada (K=8, 62% dos casos), esse eixo se desdobra em seus dois polos
+gravitacionais específicos (C1 liderada por 'agricultura' e C2 liderada por 'união').
+As demais comunidades estruturais (C4: Educação, C5: Sistema Penal, C6: Seguridade Social,
+C7: Regulação Profissional) permanecem autônomas e invariantes.
+
+CONCLUSÃO:
+A partição Louvain sobre a rede PPMI da Constituinte demonstra estabilidade
+excepcionalmente elevada: CV de Q = 0.54%, K modal = 8 (62%),
+NMI médio excluindo a partição canônica = 0.8007 ± 0.0311.
+A alternância para K=7 é teoricamente fundamentada na interface Estado-Economia,
+qualificando a estrutura como composta por 7 macro-eixos nucleares invariantes,
+com o bloco desenvolvimentista se desdobrando em dois sub-polos em K=8.
+================================================================================

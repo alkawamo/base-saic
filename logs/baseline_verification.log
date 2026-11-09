@@ -1,0 +1,23 @@
+================================================================================
+VERIFICAÇÃO DE REPRODUTIBILIDADE DO BASELINE (P1)
+Data da execução: 2026-11-09 19:16:32
+Ambiente: Python 3.11.7 | packaged by Anaconda, Inc. | (main, Dec 15 2023, 18:05:47) [MSC v.1916 64 bit (AMD64)]
+Documentos analisados: 70151
+Tempo de execução: 19.44 segundos
+================================================================================
+
+PARÂMETROS DO GRAFO ÓTIMO:
+- min_df: 2.0%
+- Percentil PPMI: 95
+- Limiar de corte (theta_95): 1.25
+
+MÉTRICAS OBTIDAS:
+- Vértices (|V|): 322 (Esperado: 322)
+- Arestas (|E|): 1823 (Esperado: 1823)
+- Densidade: 3.53% (Esperado: 3.53%)
+- Componentes conexas: 1 (Esperado: 1)
+- Modularidade (Q): 0.6363 (Esperado: 0.6363)
+- Comunidades (K): 8 (Esperado: 8)
+
+STATUS DO BASELINE: [OK] 100% REPRODUZIDO COM SUCESSO
+================================================================================

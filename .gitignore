@@ -1,0 +1,18 @@
+# Cache binário e dados temporários de PLN (gerados on-the-fly via src/curate.py)
+data/lemmatized_docs.pkl
+*.pkl
+
+# Ambientes virtuais e pacotes Python
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Checkpoints do Jupyter e Google Colab
+.ipynb_checkpoints/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

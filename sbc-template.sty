@@ -1,0 +1,79 @@
+% -------------------------------------------------------------------------
+% sbc-template.sty - Estilo oficial da Sociedade Brasileira de Computação (SBC)
+% -------------------------------------------------------------------------
+\typeout{Document Style `sbc-template' - Sociedade Brasileira de Computacao}
+
+\RequirePackage{mathptmx}
+\RequirePackage{helvet}
+\RequirePackage{courier}
+\RequirePackage{graphicx}
+
+\setlength{\paperwidth}{210mm}
+\setlength{\paperheight}{297mm}
+\setlength{\textwidth}{150mm}
+\setlength{\textheight}{232mm}
+\setlength{\topmargin}{-5mm}
+\setlength{\oddsidemargin}{5mm}
+\setlength{\evensidemargin}{5mm}
+\setlength{\headheight}{0mm}
+\setlength{\headsep}{0mm}
+\setlength{\parindent}{1.27cm}
+\setlength{\parskip}{6pt}
+
+\pagestyle{empty}
+
+\def\inst#1{\unskip$^{#1}$}
+\def\Withoom#1{\gdef\@address{#1}}
+\def\address#1{\gdef\@address{#1}}
+\def\email#1{\\\texttt{#1}}
+
+\def\@maketitle{%
+  \newpage
+  \null
+  \vspace*{8mm}
+  \begin{center}%
+    {\Large\bfseries\sffamily \@title \par}%
+    \vskip 14pt%
+    {\large\bfseries\sffamily
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 10pt%
+    {\normalsize\sffamily
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@address
+      \end{tabular}\par}%
+  \end{center}%
+  \par
+  \vskip 10pt}
+
+\renewenvironment{abstract}{%
+  \vspace*{6pt}
+  \noindent{\bfseries\sffamily Abstract.}
+  \itshape\small
+}{%
+  \par\vspace*{6pt}
+}
+
+\newenvironment{resumo}{%
+  \vspace*{6pt}
+  \noindent{\bfseries\sffamily Resumo.}
+  \itshape\small
+}{%
+  \par\vspace*{10pt}
+}
+
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-2.5ex \@plus -1ex \@minus -.2ex}%
+                                   {1.3ex \@plus.2ex}%
+                                   {\normalfont\large\bfseries\sffamily}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-2.0ex\@plus -1ex \@minus -.2ex}%
+                                     {1.0ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries\sffamily}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-1.5ex\@plus -1ex \@minus -.2ex}%
+                                     {0.8ex \@plus .2ex}%
+                                     {\normalfont\normalsize\itshape\sffamily}}

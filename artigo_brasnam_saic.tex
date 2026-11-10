@@ -1,17 +1,15 @@
 \documentclass[12pt]{article}
 
-\usepackage{sbc-template}
-\usepackage{graphicx,url}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
 \usepackage[brazil]{babel}
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
 \usepackage{multirow}
-\usepackage{microtype}
 
 \sloppy
-\emergencystretch=1.5em
 
 \title{Modelagem em Grafos de Coocorrência e Detecção de Comunidades na Base Histórica da Assembleia Nacional Constituinte de 1988: Da Curadoria dos Dados à Descoberta de Eixos Temáticos}
 
@@ -59,24 +57,15 @@ Para superar essas limitações, este artigo altera a unidade de análise do doc
 
 \section{Trabalhos Relacionados}
 
-O estudo seminal sobre a base SAIC foi conduzido por \cite{monclaire1991}, que investigaram a composição sociológica dos remetentes e realizaram cortes linguísticos de discursos específicos. Contudo, sua análise temática permaneceu restrita às 24 categorias pré-definidas pelo Prodasen, cujas distorções de granularidade os próprios autores reconheceram. Mais recentemente, a \cite{agenciasenado2024} aplicou técnicas de processamento de linguagem natural para projetar cada carta como um ponto em um mapa semântico bidimensional. Por tratar a carta inteira como unidade indivisível, a projeção concentrou a maioria dos registros em um bloco central denominado \textit{Cartas Multitemáticas}, impedindo a mensuração da força das conexões entre temas distintos ou a extração de métricas de centralidade.
+O estudo pioneiro sobre a base SAIC foi conduzido por \cite{monclaire1991}, que investigaram a composição sociológica dos remetentes, mas mantiveram sua análise temática restrita aos 24 macrotemas do Prodasen, cujas assimetrias de granularidade foram reconhecidas pelos próprios autores. Recentemente, a \cite{agenciasenado2024} aplicou técnicas de processamento de linguagem natural para projetar as cartas em mapa semântico bidimensional; contudo, ao tratar a carta inteira como unidade indivisível, a maioria dos registros concentrou-se em um bloco indiferenciado de ``cartas multitemáticas'', impedindo a extração de métricas de rede e a mensuração de conexões entre temas distintos.
 
-Na literatura internacional de análise computacional do discurso político, \cite{rule2015} modelaram os discursos anuais do Estado da União (\textit{State of the Union} --- SoU) dos presidentes norte-americanos entre 1790 e 2014 como redes semânticas de coocorrência de termos, aplicando o algoritmo de Louvain \cite{blondel2008} para extrair categorias discursivas emergentes e rastrear sua evolução temporal em diagramas de fluxo (\textit{river diagrams}). De forma complementar, \cite{erz2026} investigou a polarização temática no Congresso dos Estados Unidos (1873--2025) combinando modelagem de tópicos via LDA (\textit{Latent Dirichlet Allocation}) e detecção de comunidades em redes de similaridade parlamentar.
-
-Diferentemente de modelos probabilísticos como o LDA --- que exigem a fixação \textit{a priori} do número de tópicos --- e de projeções no nível de documento, a modelagem da base SAIC via detecção de comunidades em grafos de coocorrência ponderados por afinidade estatística (PPMI) permite decompor cartas multitemáticas em suas relações conceituais elementares e descobrir o número de eixos temáticos diretamente a partir da topologia da rede \cite{macanovic2022,tsai2022}.
+Na análise computacional do discurso político, \cite{rule2015} modelaram discursos presidenciais norte-americanos (1790--2014) como redes semânticas de coocorrência de termos, aplicando o algoritmo de Louvain \cite{blondel2008} para identificar categorias discursivas emergentes. De forma complementar, \cite{erz2026} analisou a polarização no Congresso dos EUA (1873--2025) combinando modelagem de tópicos via LDA e detecção de comunidades em redes de similaridade. Diferentemente do LDA --- que exige fixar \textit{a priori} o número de tópicos --- ou de projeções de documentos inteiros, a modelagem em grafos ponderados por PPMI permite decompor as cartas em relações conceituais elementares e derivar os eixos temáticos da própria topologia da rede \cite{macanovic2022,tsai2022}.
 
 \section{Curadoria e Higienização da Base de Dados SAIC}
 
 A base SAIC original é composta por 72.719 linhas (cartas/formulários) e 20 colunas, abrangendo dados demográficos opcionais do remetente (nome, município, UF, CEP, sexo, local de moradia, grau de instrução, estado civil, faixa etária, faixa de renda e profissão/atividade), metadados de controle, destinatário parlamentar, as duas colunas de classificação do Prodasen (\textit{Catálogo} e \textit{Indexação}) e o texto integral da sugestão (\textit{Texto Sugestão}).
 
-O processo de engenharia e limpeza de dados envolveu cinco etapas principais:
-\begin{enumerate}
-    \item \textbf{Padronização de \textit{encoding}, nulos e artefatos de planilha:} Conversão integral para UTF-8 e substituição de marcadores impróprios de ausência (como asteriscos \texttt{*}, traços isolados \texttt{-} e 323 ocorrências do erro de fórmula \texttt{\#NOME?} gerado por planilhas eletrônicas em cartas iniciadas por \texttt{=} ou \texttt{-}) pelo valor padronizado \texttt{N/A}.
-    \item \textbf{Correção de anomalias estruturais entre colunas:} A inspeção revelou deslocamentos severos de campos durante a digitação original na década de 1980: (a) temas do catálogo haviam sido digitados no campo \textit{Destinatário}; (b) subtemas da coluna \textit{Indexação} estavam misturados aos macrotemas na coluna \textit{Catálogo} (que apresentava 21.749 valores únicos antes da limpeza); e (c) trechos inteiros de cartas dos cidadãos estavam alocados dentro de \textit{Indexação}. Todos os fragmentos deslocados foram extraídos e realocados para suas colunas de direito, restringindo \textit{Catálogo} estritamente às combinações dos 24 macrotemas oficiais e consolidando \textit{Indexação} em exatamente 1.308 subtemas únicos (distribuídos em 42.941 combinações).
-    \item \textbf{Padronização geográfica e fidelidade histórica (\textit{Município} e \textit{UF}):} Realizou-se o cruzamento (\textit{merge}) com a base oficial de municípios do Governo Federal após normalização ortográfica, seguido de revisão manual dos casos divergentes, reduzindo as variantes de municípios de 3.913 para 3.542 e corrigindo UFs inválidas (de 27 para as 26 Unidades da Federação existentes em 1986--1987). Preservou-se deliberadamente a vinculação dos municípios do atual estado do Tocantins ao estado de Goiás, visto que o Tocantins só foi criado pela própria Constituição de 1988.
-    \item \textbf{Desambiguação de nomes via \textit{Fuzzy Matching} (\textit{Nome} e \textit{Destinatário}):} Para agrupar variações ortográficas e pequenos erros de digitação referentes a um mesmo indivíduo ou parlamentar, aplicou-se correspondência aproximada de strings baseada na distância de edição de Levenshtein \cite{levenshtein1966,navarro2001} com limiar estrito de similaridade de 90\%, reduzindo os nomes únicos de remetentes de 61.315 para 57.268 e os destinatários únicos de 2.836 para 2.193.
-    \item \textbf{Criação do identificador único de remetente (\textit{ID Pessoa}):} Incorporou-se uma 21ª coluna à base para identificar cada cidadão a partir da chave composta \textit{(Nome, Município, UF)}, em consonância com o critério sociológico de \cite{monclaire1991}. Por cautela metodológica, registros com valor ausente (\texttt{N/A}) em qualquer um dos três atributos determinantes receberam um identificador exclusivo para evitar falsas fusões de indivíduos distintos. Ao final, as 72.719 cartas foram mapeadas em \textbf{64.869 cidadãos distintos}.
-\end{enumerate}
+O processo de engenharia e curadoria de dados envolveu cinco etapas principais: (i)~\textbf{Padronização de \textit{encoding} e artefatos de planilha:} conversão integral para UTF-8 e substituição de marcadores espúrios e 323 erros de fórmula (\texttt{\#NOME?}) pelo valor padronizado \texttt{N/A}; (ii)~\textbf{Correção de anomalias estruturais entre colunas:} realocação de macrotemas digitados no campo \textit{Destinatário} e fragmentos de cartas inseridos em \textit{Indexação}, delimitando \textit{Catálogo} estritamente às combinações dos 24 macrotemas oficiais e consolidando \textit{Indexação} em 1.308 subtemas únicos; (iii)~\textbf{Padronização geográfica com fidelidade histórica:} harmonização de municípios (de 3.913 para 3.542 variantes) e correção de UFs para as 26 existentes em 1986--1987, preservando o território do futuro estado do Tocantins vinculado a Goiás; (iv)~\textbf{Desambiguação de nomes via \textit{Fuzzy Matching}:} agrupamento aproximado por distância de Levenshtein \cite{levenshtein1966,navarro2001} (limiar de similaridade de 90\%), reduzindo remetentes de 61.315 para 57.268 e destinatários de 2.836 para 2.193; e (v)~\textbf{Identificador único de remetente (\textit{ID Pessoa}):} chave composta \textit{(Nome, Município, UF)} \cite{monclaire1991}, atribuindo identificadores exclusivos a registros com campos nulos para evitar falsas fusões, consolidando as 72.719 cartas em \textbf{64.869 cidadãos distintos}.
 
 A Tabela~\ref{tab:limpeza} sintetiza o impacto do tratamento nas colunas que sofreram intervenções estruturais (as demais 14 colunas demográficas e de controle mantiveram suas contagens originais de nulos e valores únicos). A base de dados tratada (\texttt{SAIC.csv}) e os scripts de limpeza e análise encontram-se publicamente disponíveis no repositório \repolink.
 
@@ -94,11 +83,12 @@ A Tabela~\ref{tab:limpeza} sintetiza o impacto do tratamento nas colunas que sof
 \textbf{Destinatário} & 43.317 & 43.325 & 2.836 & 2.193 \\
 \textbf{Catálogo} & 180 & 150 & 21.749 & 14.532 \\
 \textbf{Indexação} & 14.253 & 1.152 & 39.482 & 42.941 \\
-\textbf{Texto Sugestão} & 835 & 835* & 70.096 & 70.150 \\
+\textbf{Texto Sugestão} & 835 & 835$^*$ & 70.096 & 70.150 \\
 \textbf{Município} & 21 & 97 & 3.913 & 3.542 \\
 \textbf{UF} & 0 & 122 & 27 & 26 \\
 \textbf{CEP} & 0 & 119 & 5.921 & 5.919 \\
 \bottomrule
+\multicolumn{5}{l}{\scriptsize $^*$Cartas com texto ausente mantidas para integridade dos metadados demográficos.}
 \end{tabular}
 \end{table}
 
@@ -189,46 +179,24 @@ Os resultados da Tabela~\ref{tab:poda} fornecem uma justificativa objetiva para 
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.92\textwidth]{grafo_comunidades_brasnam.png}
+\includegraphics[width=0.85\textwidth]{grafo_comunidades_brasnam.png}
 \caption{Rede de coocorrência de termos da Constituinte de 1988 ($\text{min\_df} = 2\%$, percentil 95, $Q = 0,6363$) particionada em 8 comunidades pelo algoritmo de Louvain.}
 \label{fig:grafo}
 \end{figure}
 
-\subsection{Análise de Estabilidade do Algoritmo de Louvain (50 \textit{Seeds})}
+\subsection{Análise de Estabilidade do Algoritmo de Louvain (50 Sementes)}
 
-Para certificar que a estrutura em 8 comunidades não decorre de mero viés de convergência da semente estocástica, submeteu-se o grafo ótimo a 50 execuções independentes do algoritmo de Louvain (\textit{seeds} 0 a 49). A Tabela~\ref{tab:estabilidade} e a Figura~\ref{fig:estabilidade} sumarizam o comportamento das métricas.
-
-\begin{table}[htb]
-\centering
-\caption{Análise de estabilidade do algoritmo de Louvain em 50 execuções independentes (\textit{seeds} 0 a 49) sobre o grafo ótimo ($|V|=322, |E|=1.823$).}
-\label{tab:estabilidade}
-\footnotesize
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Métrica} & \textbf{Média $\pm$ Desvio} & \textbf{Mínimo} & \textbf{Máximo} & \textbf{Mediana} \\
-\midrule
-Modularidade ($Q$) & 0,6361 $\pm$ 0,0034 & 0,6215 & 0,6397 & 0,6366 \\
-Número de Comunidades ($K$) & 7,62 $\pm$ 0,49 & 7 & 8 & 8 \\
-NMI vs.\ Partição Canônica ($N=49$)* & 0,8007 $\pm$ 0,0311 & 0,7409 & 0,8622 & 0,8037 \\
-ARI vs.\ Partição Canônica ($N=49$)* & 0,7079 $\pm$ 0,0484 & 0,5921 & 0,8016 & 0,7145 \\
-\bottomrule
-\multicolumn{5}{l}{\scriptsize *Excluindo a comparação trivial da semente 42 consigo mesma; considerando todas as 50 sementes, $\text{NMI} = 0,8047 \pm 0,0415$.}
-\end{tabular}
-\end{table}
+Para certificar que a estrutura em 8 comunidades não decorre de viés de convergência da semente estocástica, submeteu-se o grafo ótimo a 50 execuções independentes do algoritmo de Louvain com sementes distintas ($\text{seeds} \in [0, 49]$), cujos resultados estão sintetizados na Figura~\ref{fig:estabilidade}. A partição revelou estabilidade consistente: a modularidade média atingiu $Q = 0{,}6361 \pm 0{,}0034$ (mín.\ $0{,}6215$, máx.\ $0{,}6397$, mediana $0{,}6366$), com coeficiente de variação de apenas $0{,}54\%$. A configuração modal foi $K = 8$, observada em $62\%$ das execuções (31 vezes), enquanto $K = 7$ ocorreu nas $38\%$ restantes (19 vezes), sem nenhuma ocorrência de fragmentação espúria ($K \ge 9$) ou fusão excessiva ($K \le 6$). Avaliando as 49 sementes independentes frente à partição canônica ($\text{seed } 42$), obteve-se NMI médio de $0{,}8007 \pm 0{,}0311$ (mediana $0{,}8037$) e ARI médio de $0{,}7079 \pm 0{,}0484$ (mediana $0{,}7145$), comprovando elevada concordância composicional.\footnote{Considerando todas as 50 sementes, $\text{NMI} = 0{,}8047 \pm 0{,}0415$.}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=\textwidth]{fig_estabilidade_louvain.png}
-\caption{Avaliação de estabilidade do Louvain em 50 execuções (\textit{seeds} 0 a 49): (a) distribuição da modularidade ($Q$); (b) frequência do número de comunidades ($K$); e (c) similaridade NMI frente à partição canônica (\textit{seed 42}).}
+\includegraphics[width=0.85\textwidth]{fig_estabilidade_louvain.png}
+\caption{Estabilidade do Louvain (50 sementes): distribuições de $Q$, $K$ e similaridade NMI frente à partição canônica.}
 \label{fig:estabilidade}
 \end{figure}
 
-Os resultados evidenciam estabilidade excepcional da partição comunitária. A modularidade média atinge $Q = 0,6361 \pm 0,0034$, com coeficiente de variação de apenas $0,54\%$ e oscilação restrita entre $0,6215$ e $0,6397$. Em relação ao número de eixos temáticos, $K = 8$ foi a configuração modal predominante, ocorrendo em $62\%$ das execuções (31 vezes), enquanto $K = 7$ representou as $38\%$ restantes (19 vezes) --- sem nenhuma ocorrência de fragmentações espúrias ($K \ge 9$) ou fusões agressivas ($K \le 6$). Ao isolar estritamente as 49 execuções independentes (excluindo a comparação da semente 42 consigo mesma), o NMI médio mantém-se em patamar expressivo de $0,8007 \pm 0,0311$ (com mediana de $0,8037$), acompanhado por um ARI médio de $0,7079 \pm 0,0484$ (mediana $0,7145$).
-
 \paragraph{Dinâmica de Fusão $K=7$ vs.\ $K=8$ e Qualificação Estrutural.}
-Para averiguar a origem da alternância entre $K=8$ e $K=7$, rastreou-se a composição das comunidades nas 19 execuções que convergiram para 7 grupos. Constatou-se que a contração particional não decorre de instabilidade aleatória de fronteiras, mas sim de um padrão de fusão altamente concentrado: a fusão entre a comunidade \textbf{C1 (Desenvolvimento Econômico e Setores Produtivos)} e a comunidade \textbf{C2 (Administração Pública e Organização do Estado)} ocorreu em \textbf{15 das 19 execuções com $K=7$ ($78{,}9\%$ dos casos com 7 comunidades, correspondendo a $30{,}0\%$ de todas as 50 sementes testadas)}. As demais fusões foram marginais: C2 + C6 (\textit{Seguridade Social}) em 2 execuções ($10{,}5\%$ dos casos $K=7$); C3 + C8 (\textit{Estrutura Política} + \textit{Apelo Popular}) em 1 execução ($5{,}3\%$, ocorrida na semente 29, responsável pelo mínimo global de modularidade $Q=0{,}6215$); e C1 + C5 (\textit{Sistema Penal}) em 1 execução ($5{,}3\%$, semente 41).
-
-Essa predominância da fusão C1+C2 oferece uma hipótese interpretativa plausível e historicamente contextualizada. No Brasil de 1986--1987 --- sob o impacto do Plano Cruzado, inflação crônica, congelamento de preços e agudos conflitos distributivos em torno da reforma agrária ---, a regulação da produção econômica (\textit{agricultura, terra, inflação, preço, banco, indústria}) e a máquina estatal da União (\textit{união, ministério, órgão, cargo, concurso, funcionário}) operavam como esferas interdependentes no ideário do Estado desenvolvimentista e interventor. Em um patamar de modularidade ligeiramente mais agregado, o algoritmo de Louvain acomoda esses termos em um único macro-eixo estatal-produtivo; ao atingir a máxima resolução de modularidade ($Q=0{,}6363$, com $K=8$), esse bloco se bifurca organicamente em seus dois polos de atração específicos (o polo agrícola/produtivo liderado por \textit{agricultura} e o polo burocrático-federativo liderado por \textit{união}). Embora essa correspondência represente uma leitura teórica plausível e não uma prova causal determinística, ela ganha força pelo fato de que as demais comunidades (C4: Educação, C5: Sistema Penal, C6: Seguridade Social e C7: Regulação Profissional) permanecem topologicamente isoladas e invariantes. Assim, a caracterização em ``8 comunidades'' reflete a partição ótima global, devendo ser qualificada teoricamente como uma estrutura nuclear de 7 macro-eixos discursivos consolidados, na qual a interface Estado--Economia comporta tanto uma leitura condensada quanto sua especificação setorial.
+O rastreamento das 19 execuções com $K=7$ revelou que a contração decorre da fusão entre C1 (Desenvolvimento Econômico) e C2 (Administração Pública) em 78,9\% dos casos (15 execuções). Essa aglutinação é historicamente plausível: no contexto de 1986--1987 (Plano Cruzado e reforma agrária), regulação estatal e produção econômica operavam de forma indissociável, bifurcando-se apenas na máxima resolução de modularidade ($Q=0{,}6363$). As demais comunidades mantiveram-se invariantes, qualificando o achado como 7 macro-eixos nucleares com desdobramento setorial do bloco desenvolvimentista.
 
 \subsection{Análise das Oito Comunidades Encontradas e Centralidades}
 
@@ -236,38 +204,36 @@ A partição ótima ($Q = 0,6363$) divide o vocabulário em \textbf{8 comunidade
 
 \begin{table}[htb]
 \centering
-\caption{Síntese das 8 comunidades detectadas e nós com maiores centralidades (Grau, Intermediação e Proximidade) em cada subgrafo.}
+\caption{Síntese das 8 comunidades detectadas e líderes de centralidade em cada subgrafo.}
 \label{tab:comunidades}
-\scriptsize
-\setlength{\tabcolsep}{3.5pt}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{p{3.1cm}ccccp{5.1cm}}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{3.8cm}cccp{5.8cm}}
 \toprule
-\textbf{Comunidade (\textit{Bottom-Up})} & \textbf{Nós} & \textbf{Grau} & \textbf{Interm.} & \textbf{Proxim.} & \textbf{Principais Termos e Escopo Temático} \\
+\textbf{Comunidade (\textit{Bottom-Up})} & \textbf{Grau} & \textbf{Interm.} & \textbf{Proxim.} & \textbf{Principais Termos e Escopo} \\
 \midrule
-\textbf{C1: Desenv.\ Econômico e Setores Produtivos} & 31 & \textit{agricultura} & \textit{agricultura} & \textit{agricultura} & \textit{agrícola, terra, reforma, rural, produzir, preço, inflação, banco, indústria}. Reforma agrária e macroeconomia. \\
-\addlinespace
-\textbf{C2: Adm.\ Pública e Org.\ do Estado} & 33 & \textit{união} & \textit{união} & \textit{união} & \textit{estado, município, órgão, ministério, cargo, concurso, funcionário, artigo, assegurar}. Estrutura burocrática e funcionalismo. \\
-\addlinespace
-\textbf{C3: Estrutura Política do Estado} & 50 & \textit{mandato} & \textit{congresso} & \textit{mandato} & \textit{deputado, senador, prefeito, vereador, eleição, voto, partido, democracia}. Representação parlamentar e eleições. \\
-\addlinespace
-\textbf{C4: Política Educacional} & 28 & \textit{ensino} & \textit{ensino} & \textit{ensino} & \textit{educação, escola, universidade, faculdade, curso, aluno, gratuito, religioso}. Acesso ao ensino público e religioso. \\
-\addlinespace
-\textbf{C5: Sistema Penal e Segurança} & 43 & \textit{prisão} & \textit{aborto} & \textit{violência} & \textit{crime, criminoso, polícia, policial, militar, pena, morte, punição, família, criança}. Segurança pública, pena de morte e família. \\
-\addlinespace
-\textbf{C6: Seguridade Social} & 40 & \textit{previdência} & \textit{previdência} & \textit{previdência} & \textit{inps, aposentadoria, aposentado, médico, hospital, assistência, salário, mínimo, alimentação}. Previdência, saúde e renda. \\
-\addlinespace
-\textbf{C7: Autonomia e Reg.\ Profissional} & 30 & \textit{detetive} & \textit{detetive} & \textit{detetive} & \textit{autonomia, autônomo, profissional, liberal, livre, exercer, detetive, particular}. Profissões liberais e detetives particulares. \\
-\addlinespace
-\textbf{C8: Apelo Popular e Manifestações} & 67 & \textit{Deus} & \textit{Deus} & \textit{Deus} & \textit{fome, desemprego, pobre, dinheiro, comprar, sofrer, pedir, esperar, Sarney}. Carestia, desabafos e críticas ao governo. \\
+\textbf{C1: Desenv.\ Econômico} & \textit{agricultura} & \textit{agricultura} & \textit{agricultura} & \textit{terra, reforma, preço, indústria}. Agropecuária e macroeconomia. \\
+\addlinespace[2pt]
+\textbf{C2: Adm.\ Pública} & \textit{união} & \textit{união} & \textit{união} & \textit{órgão, cargo, concurso, funcionário}. Burocracia estatal e funcionalismo. \\
+\addlinespace[2pt]
+\textbf{C3: Estrutura Política} & \textit{mandato} & \textit{congresso} & \textit{mandato} & \textit{eleição, voto, deputado, partido}. Representação parlamentar e voto. \\
+\addlinespace[2pt]
+\textbf{C4: Política Educacional} & \textit{ensino} & \textit{ensino} & \textit{ensino} & \textit{escola, educação, universidade, gratuito}. Ensino público e religioso. \\
+\addlinespace[2pt]
+\textbf{C5: Sistema Penal/Segurança} & \textit{prisão} & \textit{aborto} & \textit{violência} & \textit{crime, polícia, pena, morte}. Segurança pública e punição penal. \\
+\addlinespace[2pt]
+\textbf{C6: Seguridade Social} & \textit{previdência} & \textit{previdência} & \textit{previdência} & \textit{aposentadoria, hospital, assistência, salário}. Previdência, saúde e renda. \\
+\addlinespace[2pt]
+\textbf{C7: Regulação Profissional} & \textit{detetive} & \textit{detetive} & \textit{detetive} & \textit{profissional, liberal, detetive, particular}. Profissões e atividade autônoma. \\
+\addlinespace[2pt]
+\textbf{C8: Apelo Popular} & \textit{Deus} & \textit{Deus} & \textit{Deus} & \textit{fome, desemprego, pobre, Sarney}. Carestia e manifestações populares. \\
 \bottomrule
-\end{tabular}%
-}
+\end{tabular}
 \end{table}
 
 A análise conjunta da topologia (Tabela~\ref{tab:comunidades}) revela três achados fundamentais:
 \begin{enumerate}
-    \item \textbf{Convergência de papéis centrais em cinco comunidades:} Em C1 (\textit{agricultura}), C2 (\textit{união}), C4 (\textit{ensino}), C6 (\textit{previdência}) e C7 (\textit{investigação}), um único vértice domina simultaneamente o grau, a intermediação e a proximidade, atuando como polo gravitacional absoluto do respectivo debate.
+    \item \textbf{Convergência de papéis centrais em cinco comunidades:} Em C1 (\textit{agricultura}), C2 (\textit{união}), C4 (\textit{ensino}), C6 (\textit{previdência}) e C7 (\textit{detetive}), um único vértice domina simultaneamente o grau, a intermediação e a proximidade, atuando como polo gravitacional absoluto do respectivo debate.
     \item \textbf{Diferenciação estrutural na comunidade de Sistema Penal e Segurança (C5):} C5 é a única comunidade que apresenta \textbf{três líderes distintos} para cada métrica de centralidade: \textit{prisão} detém o maior grau (conectando-se diretamente a todo o vocabulário punitivo e policial); \textit{violência} possui a maior proximidade (apresentando a menor distância média a todos os termos da comunidade, por permear tanto o debate criminal quanto o familiar); e \textit{aborto} lidera a intermediação, funcionando como nó-ponte entre o núcleo punitivo (\textit{crime, matar, pena, morte}) e o núcleo de proteção à vida e à família (\textit{criança, pai, filho, família, abandonar}).
     \item \textbf{Limitações morfológicas da lematização automática:} Observou-se nos subgrafos que o modelo \texttt{pt\_core\_news\_md} do \texttt{spaCy} manteve algumas flexões e derivações como nós distintos (ex.: \textit{deputado/deputados} em C3, \textit{querer/queremos} em C7, \textit{agrícola/agrário/agrária} em C1 e o erro de lematização \textit{peçar} para \textit{peço} em C8). Embora essa limitação morfológica infle ligeiramente a contagem de nós, o fato de todas essas variantes serem alocadas juntas em suas respectivas comunidades demonstra a robustez semântica da ponderação por PPMI.
 \end{enumerate}
@@ -278,7 +244,7 @@ Para validar quantitativamente a correspondência entre os 24 macrotemas do Prod
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.92\textwidth]{heatmap_contingencia_brasnam.png}
+\includegraphics[width=0.85\textwidth]{heatmap_contingencia_brasnam.png}
 \caption{Matriz de contingência normalizada (\%) entre os 24 temas oficiais do Prodasen (\textit{top-down}) e as 8 comunidades detectadas no grafo (\textit{bottom-up}) calculada pela Regra A.}
 \label{fig:heatmap}
 \end{figure}
@@ -291,8 +257,8 @@ O cruzamento quantitativo (Figura~\ref{fig:heatmap}) evidencia onde a taxonomia 
     \item \textbf{Reinterpretação de ``Sugestões Não Pertinentes'' (C8):} As categorias oficiais \textit{Pedido de Informação sobre a Constituinte} ($25{,}7\%$), \textit{Manifestação} ($24{,}7\%$) e \textit{Sugestões Não Pertinentes} ($19{,}4\%$) convergem fortemente para a comunidade C8 (\textit{Apelo Popular, Críticas e Manifestações}). Isso demonstra que milhares de cartas rotuladas burocraticamente como ``não pertinentes'' pela triagem de 1986 não eram ruído sem sentido, mas sim relatos pessoais de fome, desemprego, carestia e apelos diretos às autoridades (como o presidente José Sarney) e a Deus.
 \end{itemize}
 
-\paragraph{Análise de Robustez frente à Atribuição Discreta (Regra B).}
-Para averiguar a sensibilidade da matriz de contingência à forma de agregação, implementou-se uma regra alternativa de atribuição discreta (\textbf{Regra B}), alocando cada carta exclusivamente à comunidade com maior afinidade semântica (soma de pesos PPMI dos termos presentes no grafo). A comparação entre as matrizes revelou concordância perfeita nos eixos dominantes (\textit{top-1}): os principais polos temáticos mantiveram-se idênticos (\textit{Política Educacional} $\to$ C4 com $38{,}1\%$; \textit{Estrutura do Estado} $\to$ C3 com $44{,}4\%$; \textit{Trabalhista} $\to$ C7 com $40{,}3\%$; \textit{Previdenciária} $\to$ C6 com $30{,}5\%$; \textit{Agrícola} $\to$ C1 com $33{,}4\%$; \textit{Direito -- Org.\ do Estado} com C5 com $15{,}5\%$; e \textit{Manifestação} $\to$ C8 com $41{,}0\%$). Todavia, a Regra B exibiu concentração artificial em comunidades de maior porte decorrente do efeito \textit{winner-takes-all} sobre cartas longas (Erro Médio Absoluto de $8{,}55$ pontos percentuais frente à Regra A), confirmando que a Regra A é superior por acomodar a sobreposição semântica real das demandas populares.
+\paragraph{Robustez frente à Atribuição Discreta (Regra B).}
+A alocação de cada carta exclusivamente à comunidade de maior afinidade semântica (Regra B) confirmou alinhamento perfeito nos eixos dominantes (\textit{Educação} $\to$ C4 com $38{,}1\%$; \textit{Estrutura do Estado} $\to$ C3 com $44{,}4\%$; \textit{Trabalhista} $\to$ C7 com $40{,}3\%$). Contudo, o efeito \textit{winner-takes-all} concentrou cartas longas em agrupamentos maiores (erro médio absoluto de 8,55 p.p.), comprovando a superioridade da Regra A ao capturar a multitematicidade popular real.
 
 \section{Conclusões e Trabalhos Futuros}
 
@@ -331,7 +297,7 @@ Girvan, M. and Newman, M.~E. (2002).
 \newblock {\em Proceedings of the National Academy of Sciences}, 99(12):7821--7826.
 
 \bibitem[Hotho et~al. 2005]{hotho2005}
-Hotho, A., Nürnberger, A., and Paaß, G. (2005).
+Hotho, A., Nürnberger, A., and Paa{\ss}, G. (2005).
 \newblock A brief survey of text mining.
 \newblock {\em Journal for Language Technology and Computational Linguistics}, 20(1):19--62.
 
